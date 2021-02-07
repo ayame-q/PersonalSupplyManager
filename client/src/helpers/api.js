@@ -45,6 +45,9 @@ api.interceptors.response.use((response) => {
 			})
 				.then((response) => {
 					localStorage.setItem("access", response.data.access)
+					if (response.data.refresh) {
+						localStorage.setItem("refresh", response.data.refresh)
+					}
 					console.log("Token refreshed")
 					return api(config)
 				})
