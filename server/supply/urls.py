@@ -19,9 +19,10 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from . import views
 
 urlpatterns = [
-    path('supply/<slug:pk>', views.SupplyRetrieveUpdateAPIView.as_view()),
+    path('supply/create', views.SupplyCreateAPIView.as_view()),
     path('supply/search', views.SupplySearchAPIView.as_view()),
     path('supply/search/<slug:full_number>', views.SupplySearchAPIView.as_view()),
+    path('supply/<slug:pk>', views.SupplyRetrieveUpdateAPIView.as_view()),
     path('user/', views.UserListAPIView.as_view()),
     path('standard/', views.StandardListCreateAPIView.as_view()),
     path('standard/<int:pk>', views.StandardRetrieveUpdateDestroyAPIView.as_view()),

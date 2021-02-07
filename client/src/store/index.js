@@ -5,6 +5,10 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    supply_types: [
+      {name: "電子機器", value: "E"},
+      {name: "ケーブル", value: "C"},
+    ],
     users: [],
     standards: [],
     connectors: [],
@@ -15,6 +19,9 @@ export default new Vuex.Store({
     ],
   },
   getters: {
+    getSupplyTypes(state) {
+      return state.supply_types
+    },
     getUsers(state) {
       return state.users
     },
