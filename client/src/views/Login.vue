@@ -32,9 +32,25 @@ export default {
 				localStorage.setItem("access", response.data.access)
 				localStorage.setItem("refresh", response.data.refresh)
 				console.log("Logged in")
-				const next = (this.$route.query.next && !this.$route.query.next.includes("login")) ? this.$route.query.next : "/"
-				this.$router.push(next)
 			})
+		},
+		jumpToNext() {
+			const next = (this.$route.query.next && !this.$route.query.next.includes("login")) ? this.$route.query.next : "/"
+			this.$router.push(next)
+		}
+	},
+	created() {
+		const refreshToken = localStorage.getItem("refresh")
+		if (refreshToken) {
+			this.$api.post("token/verify/", {
+				token: refreshToken
+			})
+				.then((result) => {
+					if (result.status === 200) {
+						console.log("You have logged in")
+						this.jumpToNext()
+					}
+				})
 		}
 	}
 };
