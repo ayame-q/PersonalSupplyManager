@@ -30,6 +30,19 @@ export default {
 			this.$router.push(`/${uuid.replaceAll("-", "")}`)
 		}
 	},
+	created() {
+		const refreshToken = localStorage.getItem("refresh")
+		if (!refreshToken) {
+			this.$router.push("/login")
+			return
+		}
+		this.$api.post("token/verify/", {
+			token: refreshToken
+		})
+		.catch((error) => {
+			this.$router.push("/login")
+		})
+	}
 };
 </script>
 
