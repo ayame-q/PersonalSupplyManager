@@ -32,7 +32,7 @@ export default {
 				localStorage.setItem("access", response.data.access)
 				localStorage.setItem("refresh", response.data.refresh)
 				console.log("Logged in")
-				const next = (this.$route.query.next && !this.$route.query.next.indexOf("login")) || "/"
+				const next = (this.$route.query.next && !this.$route.query.next.includes("login")) ? this.$route.query.next : "/"
 				this.$router.push(next)
 			})
 		}

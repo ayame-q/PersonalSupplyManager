@@ -2,6 +2,18 @@ import axios from "axios";
 import router from "@/router";
 import Vue from "vue";
 
+const jumpToLoginPage = () => {
+	if (router.currentRoute.path !== "/login"){
+		console.log("Jumpping to Login Page")
+		router.push({
+			path: "/login",
+			query: {
+				next: router.currentRoute.fullPath
+			}
+		})
+	}
+}
+
 const api = axios.create({
 	baseURL: process.env.VUE_APP_ROOT_API ? process.env.VUE_APP_ROOT_API : "/api/",
 	timeout: 5000,
@@ -13,9 +25,9 @@ const api = axios.create({
 
 api.interceptors.request.use((config) => {
 	const token = localStorage.getItem("access")
-	if (!token) {
-		router.push("/login")
-		return config
+	if (!token && router.currentRoute.path !== "/login") {
+		jumpToLoginPage()
+		return Promise.reject("No Log in")
 	}
 	config.headers.Authorization = "Bearer " + token
 	return config
@@ -29,13 +41,7 @@ api.interceptors.response.use((response) => {
 	if (error.response.status === 401){
 		const token = localStorage.getItem("access")
 		if (!token){
-			console.log("Jumpping to Login Page")
-			router.push({
-				path: "/login",
-				query: {
-					next: router.currentRoute.fullPath
-				}
-			})
+			jumpToLoginPage()
 			return Promise.reject(error)
 		} else {
 			const config = error.config
@@ -52,12 +58,7 @@ api.interceptors.response.use((response) => {
 					return api(config)
 				})
 				.catch((error) => {
-					router.push({
-						path: "/login",
-						query: {
-							next: router.currentRoute.fullPath
-						}
-					})
+					jumpToLoginPage()
 					return Promise.reject(error)
 				})
 		}
