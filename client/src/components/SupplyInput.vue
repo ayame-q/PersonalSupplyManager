@@ -16,7 +16,6 @@
 
 <script>
 import SupplySearch from "@/components/SupplySearch";
-import axios from "axios";
 
 export default {
 	name: "SupplyInput",
@@ -54,13 +53,12 @@ export default {
 		}
 	},
 	asyncComputed: {
-		supplyTitle() {
-			if (this.value) {
-				axios.get(`/api/supply/${this.value}`)
-					.then((response) => {
-						this.supplyTitle = `${response.data.type + String(response.data.number).padStart(5, "0")}(${response.data.name})`
-					})
+		async supplyTitle() {
+			if (!this.value){
+				return ""
 			}
+			const response = await this.$api.get(`supply/${this.value}`)
+			return `${response.data.type + String(response.data.number).padStart(5, "0")}(${response.data.name})`
 		}
 	},
 	methods: {

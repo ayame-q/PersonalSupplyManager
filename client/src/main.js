@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import api from "./helpers/api"
 import AsyncComputed from "vue-async-computed";
 import VModal from 'vue-js-modal'
 
@@ -23,3 +24,4 @@ Vue.use(VModal, {
     focusTrap: true,
   }
 })
+Vue.use(api)

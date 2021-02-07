@@ -13,7 +13,6 @@
 </template>
 
 <script>
-import axios from "axios";
 import StandardInput from "@/components/StandardInput";
 
 export default {
@@ -35,10 +34,8 @@ export default {
 	},
 	methods: {
 		submit(event) {
-			axios.defaults.xsrfCookieName = 'csrftoken'
-			axios.defaults.xsrfHeaderName = "X-CSRFTOKEN"
-			const httpRequest = this.id ? axios.put : axios.post
-			httpRequest(`/api/standard/${this.id ? this.id : ""}`, {
+			const apiRequest = this.id ? this.$api.put : this.$api.post
+			apiRequest(`standard/${this.id ? this.id : ""}`, {
 				name: this.name,
 				parent: this.parent
 			})
@@ -53,7 +50,7 @@ export default {
 	},
 	created() {
 		if (this.id) {
-			axios.get(`/api/standard/${this.id}`)
+			this.$api.get(`standard/${this.id}`)
 				.then((response) => {
 					const result = response.data
 					this.name = result.name

@@ -12,7 +12,6 @@
 
 <script>
 import StandardEdit from "@/components/StandardEdit";
-import axios from "axios";
 export default {
 	name: "StandardListRecursive",
 	props: {
@@ -50,9 +49,7 @@ export default {
 					{
 						title: '削除',
 						handler: () => {
-							axios.defaults.xsrfCookieName = 'csrftoken'
-							axios.defaults.xsrfHeaderName = "X-CSRFTOKEN"
-							axios.delete(`/api/standard/${id}`)
+							this.$api.delete(`standard/${id}`)
 								.then((response) => {
 									this.$store.dispatch("updateStandards")
 									this.$modal.hide('dialog')

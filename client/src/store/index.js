@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import axios from "axios";
 
 Vue.use(Vuex)
 
@@ -50,7 +49,7 @@ export default new Vuex.Store({
   },
   actions: {
     updateUsers(context) {
-      axios.get(`/api/user/`)
+      Vue.prototype.$api.get(`user/`)
         .then((result) => {
           context.commit("setUsers", result.data)
         })
@@ -69,13 +68,13 @@ export default new Vuex.Store({
       }
     },
     updateStandards(context) {
-      axios.get(`/api/standard/`)
+      Vue.prototype.$api.get(`standard/`)
         .then((result) => {
           context.dispatch("setStandards", result.data)
         })
     },
     updateConnectors(context) {
-      axios.get(`/api/connector/`)
+      Vue.prototype.$api.get(`connector/`)
         .then((result) => {
           context.commit("setConnectors", result.data)
         })

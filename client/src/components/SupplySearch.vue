@@ -15,7 +15,6 @@
 
 <script>
 import SupplySearchResultList from "@/components/SupplySearchResultList";
-import axios from "axios";
 import {QrcodeStream} from "vue-qrcode-reader";
 
 export default {
@@ -62,7 +61,7 @@ export default {
 	},
 	methods: {
 		searchByNumber(number) {
-			axios.get(`/api/supply/search/${number}`)
+			this.$api.get(`supply/search/${number}`)
 				.then((response) => {
 					if (response.data.length === 1){
 						this.localValue = response.data[0].uuid
@@ -109,7 +108,7 @@ export default {
 				this.printMessage(location, ctx, "既に追加済みです。")
 				return
 			}
-			axios.get(`/api/supply/${uuid}`)
+			this.$api.get(`supply/${uuid}`)
 				.then((response) => {
 					this.localValue = response.data.uuid
 				})

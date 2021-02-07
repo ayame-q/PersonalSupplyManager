@@ -13,7 +13,6 @@
 
 <script>
 import ConnectorEdit from "@/components/ConnectorEdit";
-import axios from "axios";
 
 export default {
 	name: "ConnectorList",
@@ -48,9 +47,7 @@ export default {
 					{
 						title: '削除',
 						handler: () => {
-							axios.defaults.xsrfCookieName = 'csrftoken'
-							axios.defaults.xsrfHeaderName = "X-CSRFTOKEN"
-							axios.delete(`/api/connector/${id}`)
+							this.$api.delete(`connector/${id}`)
 								.then((response) => {
 									this.$store.dispatch("updateConnectors")
 									this.$modal.hide('dialog')

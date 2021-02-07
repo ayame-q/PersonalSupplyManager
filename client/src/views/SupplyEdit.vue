@@ -77,7 +77,6 @@ import ConnectorInput from "@/components/ConnectorInput";
 import StandardInput from "@/components/StandardInput";
 import StandardList from "@/components/StandardList";
 import ConnectorList from "@/components/ConnectorList";
-import axios from 'axios'
 
 export default {
 	name: "SupplyEdit",
@@ -122,9 +121,7 @@ export default {
 	},
 	methods: {
 		submit(event) {
-			axios.defaults.xsrfCookieName = 'csrftoken'
-			axios.defaults.xsrfHeaderName = "X-CSRFTOKEN"
-			axios.put(`/api/supply/${this.uuid}`, {
+			this.$api.put(`supply/${this.uuid}`, {
 				uuid: this.uuid,
 				type: this.type,
 				number: this.number,
@@ -170,7 +167,7 @@ export default {
 		this.$store.dispatch("updateUsers")
 		this.$store.dispatch("updateStandards")
 		this.$store.dispatch("updateConnectors")
-		axios.get(`/api/supply/${this.uuid}`)
+		this.$api.get(`supply/${this.uuid}`)
 		.then((response) => {
 			const result = response.data
 			this.uuid = result.uuid
