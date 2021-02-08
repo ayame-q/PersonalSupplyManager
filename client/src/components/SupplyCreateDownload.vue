@@ -5,11 +5,11 @@
 		</vue-json-csv>
 		<table>
 			<tr>
-				<th>番号</th><th>UUID</th>
+				<th>番号</th><th>URL</th>
 			</tr>
 			<tr v-for="supply in data">
 				<td>{{ supply.fullNumber }}</td>
-				<td>{{ supply.uuid }}</td>
+				<td>{{ supply.url }}</td>
 			</tr>
 		</table>
 	</div>
@@ -24,11 +24,12 @@ export default {
 	},
 	computed: {
 		data() {
+			const hostname = process.env.VUE_APP_QR_HOSTNAME
 			let result = []
 			for (const supply of this.supplies) {
 				result.push({
 					fullNumber: supply.type + String(supply.number).padStart(5, "0"),
-					uuid: supply.uuid,
+					url: hostname + "/" + supply.uuid,
 				})
 			}
 			return result
@@ -38,7 +39,7 @@ export default {
 		return {
 			labels: {
 				fullNumber: "番号",
-				uuid: "UUID"
+				url: "URL"
 			}
 		}
 	},
