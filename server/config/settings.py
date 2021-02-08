@@ -151,3 +151,6 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=3),
     'ROTATE_REFRESH_TOKENS': True,
 }
+
+if os.environ.get("JWT_SECRET"):
+    SIMPLE_JWT["SIGNING_KEY"] = os.environ.get("JWT_SECRET")
