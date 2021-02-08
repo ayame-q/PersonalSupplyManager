@@ -97,7 +97,7 @@ export default {
 		},
 		checkQR(location, ctx) {
 			const hostname = process.env.VUE_APP_QR_HOSTNAME
-			const regExp = new RegExp(hostname.replaceAll("\.", "\\.") + "\/([0-9a-f]{8})([0-9a-f]{4})([0-9a-f]{4})([0-9a-f]{4})([0-9a-f]{12})")
+			const regExp = new RegExp("http:\/\/" + hostname.replaceAll("\.", "\\.") + "\/([0-9a-f]{8})([0-9a-f]{4})([0-9a-f]{4})([0-9a-f]{4})([0-9a-f]{12})")
 			const match = this.result.match(regExp)
 			if (!match) {
 				this.printMessage(location, ctx, "他のQRコードです。")
