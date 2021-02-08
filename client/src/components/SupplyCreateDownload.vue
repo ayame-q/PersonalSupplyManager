@@ -29,7 +29,7 @@ export default {
 			for (const supply of this.supplies) {
 				result.push({
 					fullNumber: supply.type + String(supply.number).padStart(5, "0"),
-					url: hostname + "/" + supply.uuid,
+					url: "http://" + hostname + "/" + supply.uuid.replaceAll("-", ""),
 				})
 			}
 			return result
