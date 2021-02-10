@@ -10,6 +10,7 @@
 			</dl>
 			<p><input type="submit" value="ログイン"></p>
 		</form>
+		<v-dialog />
 	</div>
 </template>
 
@@ -27,12 +28,28 @@ export default {
 			this.$api.post("token/", {
 				username: this.username,
 				password: this.password
-			})
-			.then((response) => {
-				localStorage.setItem("access", response.data.access)
-				localStorage.setItem("refresh", response.data.refresh)
-				console.log("Logged in")
-			})
+				})
+				.then((response) => {
+					localStorage.setItem("access", response.data.access)
+					localStorage.setItem("refresh", response.data.refresh)
+					console.log("Logged in")
+					this.jumpToNext()
+				})
+				.catch((error) => {
+					const error_message = error.response.status === 401 ? "ユーザーIDかパスワードが間違っています" : `不明なエラーが発生しました(${error.response.status})`
+					this.$modal.show('dialog', {
+						title: "エラー",
+						text: "ユーザーIDかパスワードが間違っています",
+						buttons: [
+							{
+								title: '閉じる',
+								handler: () => {
+									this.$modal.hide('dialog')
+								}
+							},
+						]
+					})
+				})
 		},
 		jumpToNext() {
 			const next = (this.$route.query.next && !this.$route.query.next.includes("login")) ? this.$route.query.next : "/"

@@ -23,7 +23,6 @@ urlpatterns = [
     path('supply/search', views.SupplySearchAPIView.as_view()),
     path('supply/search/<slug:full_number>', views.SupplySearchAPIView.as_view()),
     path('supply/<slug:pk>', views.SupplyRetrieveUpdateAPIView.as_view()),
-    path('user/', views.UserListAPIView.as_view()),
     path('standard/', views.StandardListCreateAPIView.as_view()),
     path('standard/<int:pk>', views.StandardRetrieveUpdateDestroyAPIView.as_view()),
     path('connector/', views.ConnectorListCreateAPIView.as_view()),
@@ -31,4 +30,6 @@ urlpatterns = [
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
+    path('user/', views.UserListAPIView.as_view()),
+    path('account/change_password', views.ChangePasswordAPIView.as_view()),
 ]

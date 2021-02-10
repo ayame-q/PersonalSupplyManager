@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
+from django.contrib.auth.password_validation import validate_password
 from .models import Supply, Standard, Connector, SupplyConnectorRelation
 
 class ConnectorField(serializers.ModelField):
@@ -37,15 +38,6 @@ class SupplySerializer(serializers.ModelSerializer):
         super(SupplySerializer, self).save(**kwargs)
 
 
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = get_user_model()
-        fields = ("pk", "username")
-        extra_kwargs = {
-            'pk': {'read_only': True},
-        }
-
-
 class RecursiveField(serializers.Serializer):
     def to_representation(self, value):
         serializer = self.parent.parent.__class__(value, context=self.context)
@@ -69,3 +61,38 @@ class ConnectorSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'pk': {'read_only': True},
         }
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ("pk", "username")
+        extra_kwargs = {
+            'pk': {'read_only': True},
+        }
+
+
+class ChangePasswordSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
+    password2 = serializers.CharField(write_only=True, required=True)
+    old_password = serializers.CharField(write_only=True, required=True)
+
+    class Meta:
+        model = get_user_model()
+        fields = ('old_password', 'password', 'password2')
+
+    def validate(self, attrs):
+        if attrs['password'] != attrs['password2']:
+            raise serializers.ValidationError({"password": "パスワードが一致しません"})
+        return attrs
+
+    def validate_old_password(self, value):
+        user = self.context['request'].user
+        if not user.check_password(value):
+            raise serializers.ValidationError({"old_password": "現在のパスワードが間違っています"})
+        return value
+
+    def update(self, instance, validated_data):
+        instance.set_password(validated_data['password'])
+        instance.save()
+        return instance

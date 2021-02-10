@@ -1,10 +1,11 @@
 from django.shortcuts import render
 from django.contrib.auth import get_user_model
 from rest_framework.views import APIView
-from rest_framework.generics import ListAPIView, RetrieveUpdateAPIView, RetrieveUpdateDestroyAPIView, ListCreateAPIView
+from rest_framework.generics import ListAPIView, RetrieveUpdateAPIView, RetrieveUpdateDestroyAPIView, ListCreateAPIView, UpdateAPIView
 from rest_framework.response import Response
-from rest_framework.exceptions import APIException, ValidationError
-from .serializers import SupplySerializer, UserSerializer, StandardSerializer, ConnectorSerializer
+from rest_framework.exceptions import APIException, ValidationError, NotFound
+from rest_framework.permissions import IsAuthenticated
+from .serializers import SupplySerializer, StandardSerializer, ConnectorSerializer, UserSerializer, ChangePasswordSerializer
 from .models import Supply, Standard, Connector, types as supply_types
 import re
 
@@ -48,11 +49,6 @@ class SupplyCreateAPIView(APIView):
         return Response(supplies)
 
 
-class UserListAPIView(ListAPIView):
-    queryset = get_user_model().objects.all()
-    serializer_class = UserSerializer
-
-
 class StandardListCreateAPIView(ListCreateAPIView):
     queryset = Standard.objects.filter(parent=None).order_by("name")
     serializer_class = StandardSerializer
@@ -71,3 +67,19 @@ class ConnectorListCreateAPIView(ListCreateAPIView):
 class ConnectorRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     queryset = Connector.objects.all()
     serializer_class = ConnectorSerializer
+
+
+class UserListAPIView(ListAPIView):
+    queryset = get_user_model().objects.all()
+    serializer_class = UserSerializer
+
+
+class ChangePasswordAPIView(UpdateAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = ChangePasswordSerializer
+
+    def get_queryset(self):
+        return self.request.user
+
+    def get_object(self):
+        return self.request.user
