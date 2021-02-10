@@ -16,6 +16,16 @@ const routes = [
     component: () => import('../views/Login')
   },
   {
+    path: '/logout',
+    name: 'Logout',
+    component: () => import('../views/Logout')
+  },
+  {
+    path: '/change_password',
+    name: 'PasswordUpdate',
+    component: () => import('../views/PasswordUpdate')
+  },
+  {
     path: '/create',
     name: 'SupplyCreatePage',
     component: () => import('../views/SupplyCreatePage')
