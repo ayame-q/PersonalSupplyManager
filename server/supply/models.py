@@ -12,10 +12,16 @@ class Standard(models.Model):
     class Meta:
         ordering = ['parent__name', 'name']
 
+    def __str__(self):
+        return self.name
+
 
 class Connector(models.Model):
     name = models.CharField(max_length=40, verbose_name="名前")
     standard = models.ForeignKey(Standard, blank=True, null=True, on_delete=models.SET_NULL, verbose_name="規格")
+
+    def __str__(self):
+        return self.name
 
 
 connector_genders = [
@@ -30,6 +36,9 @@ class SupplyConnectorRelation(models.Model):
     gender = models.CharField(choices=connector_genders, blank=True, null=True, max_length=10, verbose_name="オス・メス")
     supply = models.ForeignKey("Supply", related_name="connector_relations", on_delete=models.CASCADE, verbose_name="製品")
     count = models.IntegerField(default=1, verbose_name="個数")
+
+    def __str__(self):
+        return f"{self.connector}({self.get_gender_display()}) * {self.count}"
 
 
 types = [
@@ -63,6 +72,9 @@ class Supply(models.Model):
     updated_at = models.DateTimeField(default=timezone.localtime, verbose_name="更新日")
     last_user = models.ForeignKey(get_user_model(), null=True, blank=True, on_delete=models.SET_NULL, verbose_name="最終更新者")
 
+    class Meta:
+        ordering = ['type', 'number']
+
     def get_connectors(self):
         supply_connector_relations = self.connector_relations.all()
         return [{
@@ -78,3 +90,6 @@ class Supply(models.Model):
             if data.get("connector"):
                 connector = Connector.objects.get(id=data.get("connector"))
             self.connector_relations.update_or_create(pk=data.get("pk"), connector=connector, gender=data.get("gender"), count=data.get("count"))
+
+    def __str__(self):
+        return f"{self.type}{self.number:05} [{self.uuid}]" + (" (" + self.name + ")" if self.name else "")
