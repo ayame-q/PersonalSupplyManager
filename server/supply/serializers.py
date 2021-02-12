@@ -19,7 +19,7 @@ class SupplySerializer(serializers.ModelSerializer):
     connectors = ConnectorField(model_field=Supply)
     class Meta:
         model = Supply
-        fields = ("uuid", "type", "number", "category", "name", "manufacturer", "model", "serial_number", "length", "owner", "bought_at", "parent", "standard", "connectors", "connected_supplies", "position", "is_power_cable", "is_signal_cable", "is_active_cable", "note")
+        fields = ("uuid", "type", "number", "category", "name", "manufacturer", "model", "serial_number", "length", "owner", "bought_at", "parent", "standards", "connectors", "connected_supplies", "position", "is_power_cable", "is_signal_cable", "is_active_cable", "note")
         extra_kwargs = {
             'uuid': {'read_only': True},
             'type': {'read_only': True},
@@ -31,9 +31,9 @@ class SupplySerializer(serializers.ModelSerializer):
 
     def save(self, **kwargs):
         connectors = self.initial_data["connectors"]
-        self.instance.set_connectors(connectors)
         deleted_connector_relations = self.instance.connector_relations.exclude(id__in=[connector["pk"] for connector in connectors if connector.get("pk")])
         deleted_connector_relations.delete()
+        self.instance.set_connectors(connectors)
         self.validated_data.pop("connectors")
         super(SupplySerializer, self).save(**kwargs)
 

@@ -28,9 +28,15 @@
 				<dd><input type="date" id="bought_at" v-model="bought_at"></dd>
 				<dt><label for="parent">本体</label></dt>
 				<dd><supply-input id="parent" v-model="parent"></supply-input></dd>
-				<dt><label for="standard">規格</label><button type="button" v-on:click="openStandardsManage">管理</button></dt>
-				<dd>
-					<standard-input id="standard" v-model="standard"></standard-input>
+				<dt><label for="standards">規格</label><button type="button" v-on:click="openStandardsManage">管理</button></dt>
+				<dd id="standards">
+					<div v-for="(standard, index) in standards">
+						<standard-input v-model="standards[index]"></standard-input>
+						<input type="button" v-on:click="standards.splice(index, 1)" value="削除">
+					</div>
+					<div>
+						<input type="button" v-on:click="standards.push(null)" value="追加">
+					</div>
 				</dd>
 				<dt><label for="connectors">コネクタ</label><button type="button" v-on:click="openConnectorsManage">管理</button></dt>
 				<dd id="connectors">
@@ -95,7 +101,7 @@ export default {
 			owner: [],
 			bought_at: null,
 			parent: null,
-			standard: null,
+			standards: [],
 			connectors: [{}],
 			connected_supplies: [],
 			position: null,
@@ -134,7 +140,7 @@ export default {
 				owner: this.owner,
 				bought_at: this.bought_at,
 				parent: this.parent,
-				standard: this.standard,
+				standards: this.standards,
 				connectors: this.connectors,
 				connected_supplies: this.connected_supplies,
 				position: this.position,
@@ -182,7 +188,7 @@ export default {
 			this.owner = result.owner
 			this.bought_at = result.bought_at
 			this.parent = result.parent
-			this.standard = result.standard
+			this.standards = result.standards
 			this.connectors = result.connectors
 			this.connected_supplies = result.connected_supplies
 			this.position = result.position
