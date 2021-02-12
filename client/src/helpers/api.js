@@ -45,6 +45,9 @@ api.interceptors.response.use((response) => {
 			return Promise.reject(error)
 		} else {
 			const config = error.config
+			if (config.data.refresh) {
+				return Promise.reject(error)
+			}
 
 			return api.post("token/refresh/", {
 				refresh: localStorage.getItem("refresh")
