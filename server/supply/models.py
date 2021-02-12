@@ -51,7 +51,7 @@ class Supply(models.Model):
     owner = models.ManyToManyField(get_user_model(), related_name="supplies", blank=True, verbose_name="所有者")
     bought_at = models.DateField(blank=True, null=True, verbose_name="購入日")
     parent = models.ForeignKey("self", related_name="children", blank=True, null=True, on_delete=models.SET_NULL, verbose_name="本体")
-    standard = models.ForeignKey(Standard, related_name="supplies", blank=True, null=True, on_delete=models.SET_NULL, verbose_name="規格")
+    standards = models.ManyToManyField(Standard, related_name="supplies", blank=True, verbose_name="規格")
     connectors = models.ManyToManyField(Connector, through=SupplyConnectorRelation, related_name="supplies", blank=True, verbose_name="コネクタ")
     connected_supplies = models.ManyToManyField("self", symmetrical=True, blank=True, verbose_name="接続先")
     position = models.TextField(blank=True, null=True, verbose_name="設置場所")

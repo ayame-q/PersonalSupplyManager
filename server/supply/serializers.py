@@ -19,7 +19,7 @@ class SupplySerializer(serializers.ModelSerializer):
     connectors = ConnectorField(model_field=Supply)
     class Meta:
         model = Supply
-        fields = ("uuid", "type", "number", "category", "name", "manufacturer", "model", "serial_number", "length", "owner", "bought_at", "parent", "standard", "connectors", "connected_supplies", "position", "is_power_cable", "is_signal_cable", "is_active_cable", "note")
+        fields = ("uuid", "type", "number", "category", "name", "manufacturer", "model", "serial_number", "length", "owner", "bought_at", "parent", "standards", "connectors", "connected_supplies", "position", "is_power_cable", "is_signal_cable", "is_active_cable", "note")
         extra_kwargs = {
             'uuid': {'read_only': True},
             'type': {'read_only': True},
