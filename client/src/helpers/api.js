@@ -45,12 +45,18 @@ api.interceptors.response.use((response) => {
 			return Promise.reject(error)
 		} else {
 			const config = error.config
-			if (config.data.refresh) {
+			if (config.data && config.data.refresh) {
+				jumpToLoginPage()
+				return Promise.reject(error)
+			}
+			const refresh = localStorage.getItem("access")
+			if (!refresh){
+				jumpToLoginPage()
 				return Promise.reject(error)
 			}
 
 			return api.post("token/refresh/", {
-				refresh: localStorage.getItem("refresh")
+				refresh: refresh
 			})
 				.then((response) => {
 					localStorage.setItem("access", response.data.access)
